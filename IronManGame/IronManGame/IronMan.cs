@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,53 +11,135 @@ namespace IronManGame
 {
     class IronMan :  Sprite
     {
+        //switch your dictionary to key: enums value: list<rectangles>
+        //have a proper way to switch between keys with the frames
+        
 
-        public enum PlayerState
-        {
-            idle,
-            running
-        }
-
-        Texture2D IronManSheet;
-        List<Rectangle> IdleFrames;
-        List<Rectangle> RunninFrames;
-        List<Rectangle> CurrentFrames;
-        TimeSpan idleTime;
-        TimeSpan runningTime;
-        TimeSpan goalTime;
-        TimeSpan elapsedTime;
+        string frameType;
         int currentFrame;
-        Vector2 IronManPosition;
+        TimeSpan elapsedTime;
+        KeyboardState ks;
+        SpriteEffects effects;
+        Dictionary<PlayerState, List<Rectangle>> frames;
+        List<Rectangle> CurrentFrames;
         PlayerState playerState;
+        TimeSpan goalTime;
+        TimeSpan runningTime;
 
-        Dictionary<PlayerState, Animation> animations;
+        int testelapsed;
+        int testdelay;
 
-
-        public IronMan(Texture2D texture, Vector2 position, Color color)
+        public IronMan(Texture2D texture, Vector2 position, Color color, Dictionary<PlayerState, List<Rectangle>> frames, TimeSpan runningTime)
             :base(texture, position, color)
         {
-            IdleFrames = new List<Rectangle>();
-            IdleFrames.Add(new Rectangle(1, 1, 30, 40));
-            IdleFrames.Add(new Rectangle(36, 1, 30, 40));
-            IdleFrames.Add(new Rectangle(71, 2, 32, 39));
-            IdleFrames.Add(new Rectangle(108, 3, 31, 38));
-            IdleFrames.Add(new Rectangle(145, 3, 31, 38));
-            IdleFrames.Add(new Rectangle(181, 4, 30, 37));
-            IdleFrames.Add(new Rectangle(216, 1, 29, 40));
+            this.frames = frames;
+            currentFrame = 0;
+            CurrentFrames = frames[PlayerState.idle];
+            //CurrentFrames = frames["runningFrames"];
+            this.runningTime = runningTime;
 
-            RunninFrames = new List<Rectangle>();
-            RunninFrames.Add(new Rectangle(1, 102, 29, 32));
-            RunninFrames.Add(new Rectangle(36, 103, 27, 31));
-            RunninFrames.Add(new Rectangle(68, 98, 26, 36));
-            RunninFrames.Add(new Rectangle(99, 99, 16, 35));
-            RunninFrames.Add(new Rectangle(120, 97, 22, 37));
-            RunninFrames.Add(new Rectangle(147, 101, 30, 33));
-            RunninFrames.Add(new Rectangle(182, 103, 29, 31));
-            RunninFrames.Add(new Rectangle(216, 98, 26, 36));
-            RunninFrames.Add(new Rectangle(247, 99, 19, 35));
-            RunninFrames.Add(new Rectangle(271, 97, 24, 37));
+            testdelay = 50;
+            testelapsed = 0;
+            
         }
 
 
+        public void Move(GameTime gameTime, Viewport viewport)
+        {
+            //Console.WriteLine(this.position.ToString());
+            
+            ks = Keyboard.GetState();
+            elapsedTime += gameTime.ElapsedGameTime;
+
+            testelapsed += (int) gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (ks.IsKeyDown(Keys.D))
+            {
+                playerState = PlayerState.running;
+                if (CurrentFrames != frames[PlayerState.running])
+                {
+                    CurrentFrames = frames[PlayerState.running];
+                    currentFrame = 0;
+                    elapsedTime = new TimeSpan();
+                    goalTime = runningTime;
+                    position = new Vector2(position.X, viewport.Height - CurrentFrames[currentFrame].Height * 3);
+                }
+                currentFrame++;
+                elapsedTime = new TimeSpan();
+                effects = SpriteEffects.None;
+                position.X += 3;
+            }
+
+            else if (ks.IsKeyDown(Keys.A))
+            {
+                playerState = PlayerState.running;
+                if (CurrentFrames != frames[PlayerState.running])
+                {
+                    CurrentFrames = frames[PlayerState.running];
+                    currentFrame = 0;
+                    elapsedTime = new TimeSpan();
+                    goalTime = runningTime;
+                    position = new Vector2(position.X, viewport.Height - CurrentFrames[currentFrame].Height * 3);
+                }
+                elapsedTime = new TimeSpan();
+                effects = SpriteEffects.FlipHorizontally;
+                position.X -= 3;
+            }
+            else
+            {
+                playerState = PlayerState.idle;
+            }
+
+            if (elapsedTime >= goalTime)
+            {
+
+                if (currentFrame >= CurrentFrames.Count - 1)
+                {
+                    currentFrame = 0;
+
+                }
+                else
+                {
+                    currentFrame++;
+                }
+                position = new Vector2(position.X, viewport.Height - CurrentFrames[currentFrame].Height * 3);
+                elapsedTime = new TimeSpan();
+            }
+
+            if (testelapsed >= testdelay)
+            {
+                
+
+                if (currentFrame >= CurrentFrames.Count - 1)
+                {
+                    currentFrame = 0;
+                }
+                else
+                {
+                    currentFrame++;
+                }
+                testelapsed = 0;
+            }
+
+        }
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            Console.WriteLine(position.ToString());
+            //switch (playerState)
+            //{
+            //    case PlayerState.idle:
+            //        spriteBatch.Draw(texture, position, frames["idleFrames"][currentFrame], Color.White, 0f, Vector2.Zero, 3, effects, 0);
+            //        if(ks.IsKeyDown(Keys.D))
+            //        {
+            //            playerState = PlayerState.running;
+            //        }
+            //        break;
+            //    case PlayerState.running:
+            //        spriteBatch.Draw(texture, position, frames["runningFrames"][currentFrame], Color.White, 0f, Vector2.Zero, 3, effects, 0);
+            //        break;
+
+            //}
+            spriteBatch.Draw(texture, position, frames[playerState][currentFrame], Color.White, 0f, Vector2.Zero, 3, effects, 0);
+
+        }
     }
 }

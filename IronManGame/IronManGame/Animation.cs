@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 
 namespace IronManGame
 {
-    class Animation
+    class Animation : Sprite
     {
+        TimeSpan elapsedTime;
+        int currentFrame;
         List<Rectangle> frames;
-        TimeSpan timer;
-
-        public Animation(List<Rectangle> frames, TimeSpan timer)
+        public Animation(TimeSpan elapsedTime, List<Rectangle> frames, int currentFrame)
         {
+            this.elapsedTime = elapsedTime;
             this.frames = frames;
-            this.timer = timer;
+            this.currentFrame = currentFrame;
         }
     }
 }

@@ -10,15 +10,24 @@ namespace IronManGame
 {
     class Sprite
     {
-        Texture2D texture;
-        Vector2 position;
-        Color color;
+        protected Texture2D texture;
+        protected Vector2 position;
+        protected Color color;
+        protected Rectangle sourceRetangle;
+        Vector2 origin;
+        Vector2 scale;
 
-        public Sprite(Texture2D texture, Vector2 position, Color color)
+        public Sprite(Texture2D texture, Vector2 position, Color color, Vector2 scale)
         {
             this.texture = texture;
             this.position = position;
             this.color = color;
+            this.scale = scale;
+
+            origin = new Vector2(texture.Width / 2, texture.Height / 2);
+            sourceRetangle = new Rectangle(0, 0, texture.Width, texture.Height);
         }
+
+        public void Draw()
     }
 }
