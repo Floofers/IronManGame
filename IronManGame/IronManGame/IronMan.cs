@@ -27,13 +27,15 @@ namespace IronManGame
         TimeSpan goalTime;
         TimeSpan runningTime;
 
-        
+
+
+
 
         int testelapsed;
         int testdelay;
 
-        public IronMan(TimeSpan elapsedTime, Dictionary<PlayerState, List<Rectangle>> frames, int currentFrame, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects, TimeSpan runningTime)
-            :base(elapsedTime, new List<Rectangle>(), currentFrame, texture,  position,  color,  scale,  rotation,  effects)
+        public IronMan(TimeSpan elapsedTime, TimeSpan goalTime,Dictionary<PlayerState, List<Rectangle>> frames, int currentFrame, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects, TimeSpan runningTime)
+            :base(elapsedTime, goalTime, new List<Rectangle>(), currentFrame, texture,  position,  color,  scale,  rotation,  effects)
         {
             this.frameTypes = frames;
             currentFrame = 0;
@@ -60,14 +62,16 @@ namespace IronManGame
                 playerState = PlayerState.running;
                 if (CurrentFrames != frameTypes[PlayerState.running])
                 {
+                    /// perhaps make call to animation's move function?
                     CurrentFrames = frameTypes[PlayerState.running];
-                    currentFrame = 0;
-                    elapsedTime = new TimeSpan();
+                    Move();
+                    //currentFrame = 0;
+                    //elapsedTime = new TimeSpan();
                     goalTime = runningTime;
                     position = new Vector2(position.X, viewport.Height - CurrentFrames[currentFrame].Height * 3);
                 }
-                currentFrame++;
-                elapsedTime = new TimeSpan();
+                //currentFrame++;
+                //elapsedTime = new TimeSpan();
                 effects = SpriteEffects.None;
                 position.X += 3;
             }
@@ -78,12 +82,14 @@ namespace IronManGame
                 if (CurrentFrames != frameTypes[PlayerState.running])
                 {
                     CurrentFrames = frameTypes[PlayerState.running];
-                    currentFrame = 0;
-                    elapsedTime = new TimeSpan();
+                    Move();
+                    //currentFrame = 0;
+                    //elapsedTime = new TimeSpan();
+
                     goalTime = runningTime;
                     position = new Vector2(position.X, viewport.Height - CurrentFrames[currentFrame].Height * 3);
                 }
-                elapsedTime = new TimeSpan();
+                //elapsedTime = new TimeSpan();
                 effects = SpriteEffects.FlipHorizontally;
                 position.X -= 3;
             }

@@ -88,7 +88,7 @@ namespace IronManGame
             playerState = PlayerState.idle;
             goalTime = idleTime;
             effects = SpriteEffects.None;
-            ironMan = new IronMan(elapsedTime, frames, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime);
+            ironMan = new IronMan(elapsedTime, goalTime, frames, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime);
         }
 
         protected override void Update(GameTime gameTime)
