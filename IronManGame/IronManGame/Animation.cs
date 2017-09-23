@@ -10,10 +10,10 @@ namespace IronManGame
 {
     class Animation : Sprite
     {
-        TimeSpan elapsedTime;
-        TimeSpan goalTime;
-        int currentFrame;
-        List<Rectangle> frames;
+        protected TimeSpan elapsedTime;
+        protected TimeSpan goalTime;
+        protected int currentFrame;
+        protected List<Rectangle> frames;
         public Animation(TimeSpan elapsedTime, TimeSpan goalTime, List<Rectangle> frames, int currentFrame, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
             :base( texture,  position,  color,  scale,  rotation,  effects)
         {

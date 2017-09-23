@@ -88,7 +88,7 @@ namespace IronManGame
             playerState = PlayerState.idle;
             goalTime = idleTime;
             effects = SpriteEffects.None;
-            ironMan = new IronMan(elapsedTime, goalTime, frames, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime);
+            //ironMan = new IronMan(elapsedTime, goalTime, frames, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime);
         }
 
         protected override void Update(GameTime gameTime)
@@ -97,7 +97,7 @@ namespace IronManGame
                 Exit();
             ks = Keyboard.GetState();
             //elapsedTime += gameTime.ElapsedGameTime;
-            ironMan.Move(gameTime, GraphicsDevice.Viewport);
+            //ironMan.Move(gameTime, GraphicsDevice.Viewport);
             //if (ks.IsKeyDown(Keys.D))
             //{
             //    playerState = PlayerState.running;
@@ -170,7 +170,7 @@ namespace IronManGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-            ironMan.Draw(spriteBatch);
+            //ironMan.Draw(spriteBatch);
             //spriteBatch.Draw(IronManSheet, IronManPosition, CurrentFrames[currentFrame], Color.White, 0, Vector2.Zero, 3, effects, 0);
 
             spriteBatch.End();
