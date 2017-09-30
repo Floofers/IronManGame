@@ -54,24 +54,7 @@ namespace IronManGame
             IronManSheet = Content.Load<Texture2D>("IronManSpriteSheet");
 
             IronManPosition = new Vector2(0, Window.ClientBounds.Height - 120);
-
-            IdleFrames = new List<Rectangle>();
-            IdleFrames.Add(new Rectangle(1, 1, 30, 40));
-            IdleFrames.Add(new Rectangle(36, 1, 30, 40));
-            IdleFrames.Add(new Rectangle(71, 2, 32, 39));
-            IdleFrames.Add(new Rectangle(108, 3, 31, 38));
-            IdleFrames.Add(new Rectangle(145, 3, 31, 38));
-            IdleFrames.Add(new Rectangle(181, 4, 30, 37));
-            IdleFrames.Add(new Rectangle(216, 1, 29, 40));
-
-            IdleOffSets = new List<int>();
-            IdleOffSets.Add(0);
-            IdleOffSets.Add(0);
-            IdleOffSets.Add(-2);
-            IdleOffSets.Add(-1);
-            IdleOffSets.Add(-1);
-            IdleOffSets.Add(0);
-            IdleOffSets.Add(1);
+            
 
             RunninFrames = new List<Rectangle>();
             RunninFrames.Add(new Rectangle(1, 102, 29, 32));
@@ -98,7 +81,8 @@ namespace IronManGame
             playerState = PlayerState.idle;
             goalTime = idleTime;
             effects = SpriteEffects.None;
-            ironMan = new IronMan(elapsedTime, goalTime, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime, frames, IdleOffSets);
+            //ironMan = new IronMan(elapsedTime, goalTime, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime, frames, IdleOffSets);
+            ironMan = new IronMan(IronManSheet, new Vector2(IronManPosition.X + 100, IronManPosition.Y), Color.White, new Vector2(5, 10));
         }
 
         protected override void Update(GameTime gameTime)
@@ -107,9 +91,9 @@ namespace IronManGame
 
             if (ks.IsKeyDown(Keys.Escape))
                 Exit();
-            
-            ironMan.Move(gameTime, GraphicsDevice.Viewport, ks);
 
+            //ironMan.Move(gameTime, GraphicsDevice.Viewport, ks);
+            ironMan.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -125,6 +109,7 @@ namespace IronManGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
+
             ironMan.Draw(spriteBatch);
 
             spriteBatch.End();

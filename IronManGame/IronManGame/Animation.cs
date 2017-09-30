@@ -8,24 +8,23 @@ using System.Threading.Tasks;
 
 namespace IronManGame
 {
-    class Animation : Sprite
+    public class Animation : Sprite
     {
         protected TimeSpan elapsedTime;
         protected TimeSpan goalTime;
         protected int currentFrame;
         protected List<Rectangle> frames;
 
-        public Animation(TimeSpan elapsedTime, TimeSpan goalTime, List<Rectangle> frames, int currentFrame, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
+        public Animation(TimeSpan goalTime, List<Rectangle> frames, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
             : base(texture, position, color, scale, rotation, effects)
         {
-            this.elapsedTime = elapsedTime;
+            elapsedTime = TimeSpan.Zero;
+            currentFrame = 0;
             this.goalTime = goalTime;
-            this.frames = frames;
-            this.currentFrame = currentFrame;
-
+            this.frames = frames;            
         }
 
-        public void Move(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             elapsedTime += gameTime.ElapsedGameTime;
             Console.WriteLine(currentFrame);
@@ -40,10 +39,10 @@ namespace IronManGame
                 {
                     currentFrame++;
                 }
-                elapsedTime = new TimeSpan();
-
+                elapsedTime = TimeSpan.Zero;             
             }
 
-        }
+            sourceRectangle = frames[currentFrame];
+        }        
     }
 }

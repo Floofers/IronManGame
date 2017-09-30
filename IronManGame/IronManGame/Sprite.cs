@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace IronManGame
 {
-    class Sprite
+    public class Sprite
     {
-        protected Texture2D texture;
-        protected Vector2 position;
-        protected Color color;
-        protected Rectangle sourceRectangle;
-        Vector2 origin;
+        public Texture2D texture;
+        public Vector2 position;
+        public Color color;
+        public  Rectangle sourceRectangle;
+        public Vector2 origin;
         Vector2 scale;
         float rotation;
         SpriteEffects effects;
