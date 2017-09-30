@@ -16,6 +16,7 @@ namespace IronManGame
         KeyboardState ks;
         Texture2D IronManSheet;
         List<Rectangle> IdleFrames;
+        public List<int> IdleOffSets;
         List<Rectangle> RunninFrames;
         List<Rectangle> CurrentFrames;
         TimeSpan idleTime;
@@ -63,6 +64,15 @@ namespace IronManGame
             IdleFrames.Add(new Rectangle(181, 4, 30, 37));
             IdleFrames.Add(new Rectangle(216, 1, 29, 40));
 
+            IdleOffSets = new List<int>();
+            IdleOffSets.Add(0);
+            IdleOffSets.Add(0);
+            IdleOffSets.Add(-2);
+            IdleOffSets.Add(-1);
+            IdleOffSets.Add(-1);
+            IdleOffSets.Add(0);
+            IdleOffSets.Add(1);
+
             RunninFrames = new List<Rectangle>();
             RunninFrames.Add(new Rectangle(1, 102, 29, 32));
             RunninFrames.Add(new Rectangle(36, 103, 27, 31));
@@ -77,7 +87,7 @@ namespace IronManGame
 
             frames.Add(PlayerState.idle, IdleFrames);
             frames.Add(PlayerState.running, RunninFrames);
-            
+
 
             CurrentFrames = IdleFrames;
 
@@ -88,73 +98,18 @@ namespace IronManGame
             playerState = PlayerState.idle;
             goalTime = idleTime;
             effects = SpriteEffects.None;
-            //ironMan = new IronMan(elapsedTime, goalTime, frames, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime);
+            ironMan = new IronMan(elapsedTime, goalTime, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime, frames, IdleOffSets);
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
             ks = Keyboard.GetState();
-            //elapsedTime += gameTime.ElapsedGameTime;
-            //ironMan.Move(gameTime, GraphicsDevice.Viewport);
-            //if (ks.IsKeyDown(Keys.D))
-            //{
-            //    playerState = PlayerState.running;
-            //    if (CurrentFrames != RunninFrames)
-            //    {
-            //        CurrentFrames = RunninFrames;
-            //        currentFrame = 0;
-            //        elapsedTime = new TimeSpan();
-            //        goalTime = runningTime;
-            //        IronManPosition = new Vector2(IronManPosition.X, GraphicsDevice.Viewport.Height - CurrentFrames[currentFrame].Height * 3);
-            //    }
-            //    effects = SpriteEffects.None;
-            //    IronManPosition.X += 3;
-            //}
-            //else if(ks.IsKeyDown(Keys.A))
-            //{
-            //    playerState = PlayerState.running;
-            //    if (CurrentFrames != RunninFrames)
-            //    {
-            //        CurrentFrames = RunninFrames;
-            //        currentFrame = 0;
-            //        elapsedTime = new TimeSpan();
-            //        goalTime = runningTime;
-            //        IronManPosition = new Vector2(IronManPosition.X, GraphicsDevice.Viewport.Height - CurrentFrames[currentFrame].Height * 3);
-            //    }
-            //    effects = SpriteEffects.FlipHorizontally;
-            //    IronManPosition.X -= 3;
-            //}
-            //if (ks.IsKeyDown(Keys.Space))
-            //{
 
-            //}
-            //else
-            //{
-            //    playerState = PlayerState.idle;
-            //    if (CurrentFrames != IdleFrames)
-            //    {
-            //        CurrentFrames = IdleFrames;
-            //        currentFrame = 0;
-            //        elapsedTime = new TimeSpan();
-            //        goalTime = idleTime;
-            //        IronManPosition = new Vector2(IronManPosition.X, GraphicsDevice.Viewport.Height - CurrentFrames[currentFrame].Height * 3);
-            //    }
-            //}
+            if (ks.IsKeyDown(Keys.Escape))
+                Exit();
+            
+            ironMan.Move(gameTime, GraphicsDevice.Viewport, ks);
 
-            //if (elapsedTime >= goalTime)
-            //{
-            //    currentFrame++;
-            //    if (currentFrame >= CurrentFrames.Count)
-            //    {
-            //        currentFrame = 0;
-
-            //    }
-
-            //    IronManPosition = new Vector2(IronManPosition.X, GraphicsDevice.Viewport.Height - CurrentFrames[currentFrame].Height * 3);
-            //    elapsedTime = new TimeSpan();
-            //}
 
             base.Update(gameTime);
         }
@@ -170,8 +125,7 @@ namespace IronManGame
             // TODO: Add your drawing code here
 
             spriteBatch.Begin();
-            //ironMan.Draw(spriteBatch);
-            //spriteBatch.Draw(IronManSheet, IronManPosition, CurrentFrames[currentFrame], Color.White, 0, Vector2.Zero, 3, effects, 0);
+            ironMan.Draw(spriteBatch);
 
             spriteBatch.End();
 

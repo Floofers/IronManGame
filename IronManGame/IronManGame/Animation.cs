@@ -14,8 +14,9 @@ namespace IronManGame
         protected TimeSpan goalTime;
         protected int currentFrame;
         protected List<Rectangle> frames;
+
         public Animation(TimeSpan elapsedTime, TimeSpan goalTime, List<Rectangle> frames, int currentFrame, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
-            :base( texture,  position,  color,  scale,  rotation,  effects)
+            : base(texture, position, color, scale, rotation, effects)
         {
             this.elapsedTime = elapsedTime;
             this.goalTime = goalTime;
@@ -24,23 +25,25 @@ namespace IronManGame
 
         }
 
-        public void Move()
+        public void Move(GameTime gameTime)
         {
+            elapsedTime += gameTime.ElapsedGameTime;
+            Console.WriteLine(currentFrame);
             if (elapsedTime >= goalTime)
             {
-                
-                if (currentFrame < frames.Count)
+
+                if (currentFrame >= frames.Count - 1)
                 {
-                    if(currentFrame >= frames.Count-1)
-                    {
-                        currentFrame = 0;
-                    }
-                    currentFrame++;
-                    elapsedTime = new TimeSpan();
+                    currentFrame = 0;
                 }
-                
+                else
+                {
+                    currentFrame++;
+                }
+                elapsedTime = new TimeSpan();
+
             }
-            
+
         }
     }
 }
