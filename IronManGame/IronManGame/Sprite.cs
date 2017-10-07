@@ -17,7 +17,7 @@ namespace IronManGame
         public Vector2 origin;
         Vector2 scale;
         float rotation;
-        SpriteEffects effects;
+        public SpriteEffects effects;
 
         public Sprite(Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
         {

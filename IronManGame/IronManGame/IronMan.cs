@@ -47,7 +47,7 @@ namespace IronManGame
             ChangeState(PlayerState.idle);
         }
 
-        public void Update()
+        public override void Update(GameTime gameTime)
         {
             ks = Keyboard.GetState();
             if (ks.IsKeyDown(Keys.D))
@@ -55,10 +55,21 @@ namespace IronManGame
                 ChangeState(PlayerState.running);
                 runningState = RunningState.Right;
             }
-            if(ks.IsKeyDown(Keys.A))
+            else if(ks.IsKeyDown(Keys.A))
             {
+                ChangeState(PlayerState.running);
                 runningState = RunningState.Left;
             }
+            else if (ks.IsKeyUp(Keys.D))
+            {
+                ChangeState(PlayerState.idle);
+            }
+
+            else if(ks.IsKeyUp(Keys.A))
+            {
+                ChangeState(PlayerState.idle);
+            }
+            base.Update(gameTime);
         }
     }
 }

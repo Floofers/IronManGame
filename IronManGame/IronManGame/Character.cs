@@ -11,6 +11,7 @@ namespace IronManGame
     public class Character
     {
         Dictionary<PlayerState, Animation> animations;
+        SpriteEffects effects;
 
         public PlayerState CurrentState { get; private set; }
 
@@ -30,7 +31,7 @@ namespace IronManGame
             this.speed = speed;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             switch (CurrentState)
             {
@@ -40,10 +41,13 @@ namespace IronManGame
 
                     if (runningState == RunningState.Left)
                     {
+                        effects = SpriteEffects.None;
                         animations[CurrentState].position = new Vector2(animations[CurrentState].position.X - speed.X, animations[CurrentState].position.Y);
+                        
                     }
                     if (runningState == RunningState.Right)
                     {
+                        effects = SpriteEffects.FlipHorizontally;
                         animations[CurrentState].position = new Vector2(animations[CurrentState].position.X + speed.X, animations[CurrentState].position.Y);
                     }
                     break;
@@ -51,6 +55,11 @@ namespace IronManGame
 
             animations[CurrentState].origin = new Vector2(animations[CurrentState].sourceRectangle.Width / 2, animations[CurrentState].sourceRectangle.Height / 2);
             animations[CurrentState].Update(gameTime);
+
+            foreach (KeyValuePair<PlayerState, Animation> item in animations)
+            {
+                item.Value.position = animations[CurrentState].position;
+            }
         }
 
         protected void ChangeState(PlayerState playerState)
