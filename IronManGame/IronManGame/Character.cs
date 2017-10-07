@@ -21,37 +21,119 @@ namespace IronManGame
             Right
         }
 
+        protected enum JumpingState
+        {
+            InitialJump,
+            InAir,
+            Falling
+        }
+
         protected RunningState runningState;
+        protected JumpingState jumpingState;
 
         Vector2 speed;
+        float gravity = .5f;
+        float velocity;
+        protected bool isJumping = false;
 
         public Character(Vector2 speed)
         {
             animations = new Dictionary<PlayerState, Animation>();
             this.speed = speed;
+            velocity = speed.Y;
         }
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime, Viewport viewport)
         {
-            switch (CurrentState)
+            if (CurrentState == PlayerState.idle)
             {
-                case PlayerState.idle:
-                    break;
-                case PlayerState.running:
-
-                    if (runningState == RunningState.Left)
-                    {
-                        effects = SpriteEffects.None;
-                        animations[CurrentState].position = new Vector2(animations[CurrentState].position.X - speed.X, animations[CurrentState].position.Y);
-                        
-                    }
-                    if (runningState == RunningState.Right)
-                    {
-                        effects = SpriteEffects.FlipHorizontally;
-                        animations[CurrentState].position = new Vector2(animations[CurrentState].position.X + speed.X, animations[CurrentState].position.Y);
-                    }
-                    break;
+                animations[PlayerState.idle].effects = animations[PlayerState.running].effects;
             }
+            if (CurrentState == PlayerState.running)
+            {
+                if (runningState == RunningState.Left)
+                {
+                    animations[CurrentState].effects = SpriteEffects.FlipHorizontally;
+                    animations[CurrentState].position = new Vector2(animations[CurrentState].position.X - speed.X, animations[CurrentState].position.Y);
+
+                }
+                if (runningState == RunningState.Right)
+                {
+                    animations[CurrentState].effects = SpriteEffects.None;
+                    animations[CurrentState].position = new Vector2(animations[CurrentState].position.X + speed.X, animations[CurrentState].position.Y);
+                }
+            }
+            if (CurrentState == PlayerState.jumping || isJumping == true)
+            {
+                velocity -= gravity;
+                animations[CurrentState].position = new Vector2(animations[CurrentState].position.X, animations[CurrentState].position.Y - velocity);
+
+                if (animations[CurrentState].position.Y > viewport.Height - 120)
+                {
+                    animations[CurrentState].position.Y = viewport.Height - 120;
+                    velocity = speed.Y;
+                    ChangeState(PlayerState.jumping);
+                    isJumping = false;
+                }
+
+                if (jumpingState == JumpingState.InitialJump)
+                {
+                    
+                }
+                if (jumpingState == JumpingState.InAir)
+                {
+
+                }
+                if (jumpingState == JumpingState.Falling)
+                {
+
+                }
+            }
+            //switch (CurrentState)
+            //{
+            //    case PlayerState.idle:
+
+            //        animations[PlayerState.idle].effects = animations[PlayerState.running].effects;
+            //        break;
+            //    case PlayerState.running:
+
+            //        if (runningState == RunningState.Left)
+            //        {
+            //            animations[CurrentState].effects = SpriteEffects.FlipHorizontally;
+            //            animations[CurrentState].position = new Vector2(animations[CurrentState].position.X - speed.X, animations[CurrentState].position.Y);
+
+            //        }
+            //        if (runningState == RunningState.Right)
+            //        {
+            //            animations[CurrentState].effects = SpriteEffects.None;
+            //            animations[CurrentState].position = new Vector2(animations[CurrentState].position.X + speed.X, animations[CurrentState].position.Y);
+            //        }
+            //        break;
+            //    case PlayerState.jumping:
+
+            //        velocity -= gravity;
+            //        animations[CurrentState].position = new Vector2(animations[CurrentState].position.X, animations[CurrentState].position.Y - velocity);
+
+            //        if (animations[CurrentState].position.Y > viewport.Height - 120)
+            //        {
+            //            velocity = speed.Y;
+            //            ChangeState(PlayerState.idle);
+            //        }
+
+            //        if (jumpingState == JumpingState.InitialJump)
+            //        {
+
+            //        }
+            //        if (jumpingState == JumpingState.InAir)
+            //        {
+
+            //        }
+            //        if (jumpingState == JumpingState.Falling)
+            //        {
+
+            //        }
+            //        break;
+            //}
 
             animations[CurrentState].origin = new Vector2(animations[CurrentState].sourceRectangle.Width / 2, animations[CurrentState].sourceRectangle.Height / 2);
             animations[CurrentState].Update(gameTime);

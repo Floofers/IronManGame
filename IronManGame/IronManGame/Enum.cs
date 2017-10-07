@@ -8,7 +8,8 @@ namespace IronManGame
 {
     public enum PlayerState
     {
-        idle,
-        running
+        idle = 1,
+        running = 2,
+        jumping = 4
     }
 }

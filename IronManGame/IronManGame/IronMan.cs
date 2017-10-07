@@ -44,10 +44,28 @@ namespace IronManGame
 
             AddAnimations(PlayerState.running, runningAnimation);
 
+            List<Rectangle> jumpingFrames = new List<Rectangle>();
+            jumpingFrames.Add(new Rectangle(1, 305, 32, 38));
+            jumpingFrames.Add(new Rectangle(38, 297, 27, 46));
+            jumpingFrames.Add(new Rectangle(70, 305, 32, 38));
+            jumpingFrames.Add(new Rectangle(107, 305, 32, 38));
+            jumpingFrames.Add(new Rectangle(144, 307, 32, 36));
+            jumpingFrames.Add(new Rectangle(818, 304, 32, 39));
+            jumpingFrames.Add(new Rectangle(218, 296, 27, 47));
+            jumpingFrames.Add(new Rectangle(250, 297, 27, 46));
+            jumpingFrames.Add(new Rectangle(282, 296, 26, 46));
+            jumpingFrames.Add(new Rectangle(313, 297, 27, 46));
+            jumpingFrames.Add(new Rectangle(345, 297, 27, 46));
+
+
+            Animation jumpingAnimation = new Animation(TimeSpan.FromMilliseconds(100), idleFrames, image, position, tint, new Vector2(3), 0, SpriteEffects.None);
+
+            AddAnimations(PlayerState.jumping, jumpingAnimation);
+
             ChangeState(PlayerState.idle);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, Viewport viewport)
         {
             ks = Keyboard.GetState();
             if (ks.IsKeyDown(Keys.D))
@@ -60,16 +78,23 @@ namespace IronManGame
                 ChangeState(PlayerState.running);
                 runningState = RunningState.Left;
             }
-            else if (ks.IsKeyUp(Keys.D))
+            else if (ks.IsKeyUp(Keys.D) && CurrentState != PlayerState.jumping)
+            {
+                ChangeState(PlayerState.idle);
+            }
+            else if(ks.IsKeyUp(Keys.A) && CurrentState != PlayerState.jumping)
             {
                 ChangeState(PlayerState.idle);
             }
 
-            else if(ks.IsKeyUp(Keys.A))
+            if (ks.IsKeyDown(Keys.W))
             {
-                ChangeState(PlayerState.idle);
+                ChangeState(PlayerState.jumping);
+                jumpingState = JumpingState.InitialJump;
+                isJumping = true;
             }
-            base.Update(gameTime);
+            
+            base.Update(gameTime, viewport);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace IronManGame
                 Exit();
 
             //ironMan.Move(gameTime, GraphicsDevice.Viewport, ks);
-            ironMan.Update(gameTime);
+            ironMan.Update(gameTime, GraphicsDevice.Viewport);
 
             base.Update(gameTime);
         }
