@@ -11,9 +11,9 @@ namespace IronManGame
     public class Animation : Sprite
     {
         protected TimeSpan elapsedTime;
-        protected TimeSpan goalTime;
+        public TimeSpan goalTime;
         protected int currentFrame;
-        protected List<Rectangle> frames;
+        public List<Rectangle> frames;
 
         public Animation(TimeSpan goalTime, List<Rectangle> frames, Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
             : base(texture, position, color, scale, rotation, effects)
