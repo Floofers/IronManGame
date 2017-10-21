@@ -11,7 +11,6 @@ namespace IronManGame
     public class Character
     {
         //Dictionary<PlayerState, Animation> animations;
-        SpriteEffects effects;
 
         Dictionary<PlayerState, KeyValuePair<List<Rectangle>, TimeSpan>> animations;
 

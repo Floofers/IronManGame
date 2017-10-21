@@ -12,6 +12,8 @@ namespace IronManGame
     class IronMan : Character
     {
         KeyboardState ks;
+        PlayerState CurrentState;
+
         public IronMan (Texture2D image, Vector2 position, Color tint, Vector2 speed)
             :base(speed)
         {
@@ -67,32 +69,38 @@ namespace IronManGame
         public override void Update(GameTime gameTime, Viewport viewport)
         {
             ks = Keyboard.GetState();
-            //if (ks.IsKeyDown(Keys.D))
-            //{
-            //    ChangeState(PlayerState.running);
-            //    runningState = RunningState.Right;
-            //}
-            //else if(ks.IsKeyDown(Keys.A))
-            //{
-            //    ChangeState(PlayerState.running);
-            //    runningState = RunningState.Left;
-            //}
-            //else if (ks.IsKeyUp(Keys.D) && CurrentState != PlayerState.jumping)
-            //{
-            //    ChangeState(PlayerState.idle);
-            //}
-            //else if(ks.IsKeyUp(Keys.A) && CurrentState != PlayerState.jumping)
-            //{
-            //    ChangeState(PlayerState.idle);
-            //}
+            if (ks.IsKeyDown(Keys.D))
+            {
+                ChangeState(PlayerState.running);
+                runningState = RunningState.Right;
+                currentAnimation.currentFrame = 0;
+            }
+            else if (ks.IsKeyDown(Keys.A))
+            {
+                ChangeState(PlayerState.running);
+                runningState = RunningState.Left;
+                currentAnimation.currentFrame = 0;
+            }
+            else if (ks.IsKeyUp(Keys.D) &&  CurrentState != PlayerState.jumping)
+            {
+                ChangeState(PlayerState.jumping);
+                
+            }
+            else if (ks.IsKeyUp(Keys.A) && CurrentState != PlayerState.jumping)
+            {
+                ChangeState(PlayerState.jumping);
+                
+            }
 
-            //if (ks.IsKeyDown(Keys.W))
-            //{
-            //    ChangeState(PlayerState.jumping);
-            //    jumpingState = JumpingState.InitialJump;
-            //    isJumping = true;
-            //}
-            
+            if (ks.IsKeyDown(Keys.W))
+            {
+                ChangeState(PlayerState.jumping);
+                jumpingState = JumpingState.InitialJump;
+                isJumping = true;
+                currentAnimation.currentFrame = 0;
+            }
+
+
             base.Update(gameTime, viewport);
         }
     }
