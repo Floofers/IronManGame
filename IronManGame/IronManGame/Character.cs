@@ -182,8 +182,12 @@ namespace IronManGame
 
         protected void ChangeState(PlayerState playerState)
         {
-            currentAnimation.frames = animations[playerState].Key;
-            currentAnimation.goalTime = animations[playerState].Value;
+            if (!StateEquals(playerState))
+            {
+                currentAnimation.frames = animations[playerState].Key;
+                currentAnimation.goalTime = animations[playerState].Value;
+                currentAnimation.currentFrame = 0;
+            }
         }
 
         protected bool StateEquals(PlayerState playerState)

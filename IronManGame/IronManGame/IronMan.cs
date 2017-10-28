@@ -69,37 +69,38 @@ namespace IronManGame
         public override void Update(GameTime gameTime, Viewport viewport)
         {
             ks = Keyboard.GetState();
+            
+            //if (ks.IsKeyUp(Keys.D) &&  CurrentState != PlayerState.jumping)
+            //{
+            //    ChangeState(PlayerState.jumping);
+                
+            //}
+            //else if (ks.IsKeyUp(Keys.A) && CurrentState == PlayerState.jumping)
+            //{
+            //    ChangeState(PlayerState.jumping);
+                
+            //}
             if (ks.IsKeyDown(Keys.D))
             {
                 ChangeState(PlayerState.running);
                 runningState = RunningState.Right;
-                currentAnimation.currentFrame = 0;
             }
             else if (ks.IsKeyDown(Keys.A))
             {
                 ChangeState(PlayerState.running);
                 runningState = RunningState.Left;
-                currentAnimation.currentFrame = 0;
             }
-            else if (ks.IsKeyUp(Keys.D) &&  CurrentState != PlayerState.jumping)
-            {
-                ChangeState(PlayerState.jumping);
-                
-            }
-            else if (ks.IsKeyUp(Keys.A) && CurrentState != PlayerState.jumping)
-            {
-                ChangeState(PlayerState.jumping);
-                
-            }
-
-            if (ks.IsKeyDown(Keys.W))
+            else if (ks.IsKeyDown(Keys.W))
             {
                 ChangeState(PlayerState.jumping);
                 jumpingState = JumpingState.InitialJump;
                 isJumping = true;
-                currentAnimation.currentFrame = 0;
             }
-
+            
+            if(ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W))
+            {
+                ChangeState(PlayerState.idle);
+            }
 
             base.Update(gameTime, viewport);
         }
