@@ -77,7 +77,13 @@ namespace IronManGame
                     velocity = speed.Y;
                     ChangeState(PlayerState.jumping);
                     isJumping = false;
+                    ChangeState(PlayerState.idle);
                 }
+            }
+
+            if (StateEquals(PlayerState.shooting))
+            {
+
             }
             currentAnimation.Update(gameTime);
 

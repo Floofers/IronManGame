@@ -63,6 +63,12 @@ namespace IronManGame
 
             AddAnimations(PlayerState.falling, fallingFrames, TimeSpan.FromMilliseconds(100));
 
+            List<Rectangle> shootingFrames = new List<Rectangle>();
+            shootingFrames.Add(new Rectangle(1, 426, 41, 37));
+            shootingFrames.Add(new Rectangle(47, 425, 39, 38));
+
+            AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(500));
+
             ChangeState(PlayerState.idle);
         }
 
@@ -96,10 +102,18 @@ namespace IronManGame
                 jumpingState = JumpingState.InitialJump;
                 isJumping = true;
             }
-            
-            if(ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W))
+            else if (ks.IsKeyDown(Keys.Space))
+            {
+                ChangeState(PlayerState.shooting);
+            }
+            else if (StateEquals(PlayerState.jumping) && ks.IsKeyUp(Keys.W))
+            {
+                isJumping = true;
+            }
+            else if(ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W))
             {
                 ChangeState(PlayerState.idle);
+                isJumping = false;
             }
 
             base.Update(gameTime, viewport);
