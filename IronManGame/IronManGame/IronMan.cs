@@ -69,6 +69,12 @@ namespace IronManGame
 
             AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(500));
 
+            //List<Rectangle> bulletFrames = new List<Rectangle>();
+            //bulletFrames.Add(new Rectangle(1, 743, 16, 8));
+            //bulletFrames.Add(new Rectangle(22, 743, 16, 8));
+
+            List<Shot> bullets = new List<Shot>();
+
             ChangeState(PlayerState.idle);
         }
 
@@ -105,6 +111,8 @@ namespace IronManGame
             else if (ks.IsKeyDown(Keys.Space))
             {
                 ChangeState(PlayerState.shooting);
+
+                
             }
             else if (StateEquals(PlayerState.jumping) && ks.IsKeyUp(Keys.W))
             {

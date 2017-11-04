@@ -33,6 +33,8 @@ namespace IronManGame
         protected JumpingState jumpingState;
 
         Vector2 speed;
+        Vector2 bulletPosition;
+        int bulletSpeed = 3;
         float gravity = .5f;
         float velocity;
         protected bool isJumping = false;
@@ -83,7 +85,7 @@ namespace IronManGame
 
             if (StateEquals(PlayerState.shooting))
             {
-
+                bulletPosition.X -= bulletSpeed;
             }
             currentAnimation.Update(gameTime);
 
