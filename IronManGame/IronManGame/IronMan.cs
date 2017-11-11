@@ -14,6 +14,11 @@ namespace IronManGame
         KeyboardState ks;
         PlayerState CurrentState;
 
+        List<Shot> bullets = new List<Shot>();
+        List<Rectangle> bulletFrames = new List<Rectangle>();
+        
+
+
         public IronMan (Texture2D image, Vector2 position, Color tint, Vector2 speed)
             :base(speed)
         {
@@ -69,11 +74,8 @@ namespace IronManGame
 
             AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(500));
 
-            //List<Rectangle> bulletFrames = new List<Rectangle>();
-            //bulletFrames.Add(new Rectangle(1, 743, 16, 8));
-            //bulletFrames.Add(new Rectangle(22, 743, 16, 8));
-
-            List<Shot> bullets = new List<Shot>();
+            bulletFrames.Add(new Rectangle(1, 743, 16, 8));
+            bulletFrames.Add(new Rectangle(22, 743, 16, 8));
 
             ChangeState(PlayerState.idle);
         }
@@ -111,8 +113,7 @@ namespace IronManGame
             else if (ks.IsKeyDown(Keys.Space))
             {
                 ChangeState(PlayerState.shooting);
-
-                
+                bullets.Add(new Shot(bulletFrames, currentAnimation.texture, currentAnimation.position, currentAnimation.effects));
             }
             else if (StateEquals(PlayerState.jumping) && ks.IsKeyUp(Keys.W))
             {
