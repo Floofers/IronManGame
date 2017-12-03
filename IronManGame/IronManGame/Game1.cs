@@ -82,7 +82,7 @@ namespace IronManGame
             goalTime = idleTime;
             effects = SpriteEffects.None;
             //ironMan = new IronMan(elapsedTime, goalTime, currentFrame, IronManSheet, IronManPosition, Color.White, new Vector2(3f), 0, SpriteEffects.None, runningTime, frames, IdleOffSets);
-            ironMan = new IronMan(IronManSheet, new Vector2(IronManPosition.X + 100, IronManPosition.Y), Color.White, new Vector2(5, 10));
+            ironMan = new IronMan(IronManSheet, new Vector2(IronManPosition.X + 100, IronManPosition.Y), Color.White, new Vector2(5, 10), GraphicsDevice.Viewport);
         }
 
         protected override void Update(GameTime gameTime)

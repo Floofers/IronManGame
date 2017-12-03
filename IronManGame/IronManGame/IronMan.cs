@@ -11,19 +11,21 @@ namespace IronManGame
 {
     class IronMan : Character
     {
+        KeyboardState prevKs;
         KeyboardState ks;
         PlayerState CurrentState;
 
+
         List<Shot> bullets = new List<Shot>();
-        List<Rectangle> bulletFrames = new List<Rectangle>();
-        
+        bool bulletsExist = false;
+        Viewport vp;
 
 
-        public IronMan (Texture2D image, Vector2 position, Color tint, Vector2 speed)
-            :base(speed)
+        public IronMan(Texture2D image, Vector2 position, Color tint, Vector2 speed, Viewport vp)
+            : base(speed)
         {
             currentAnimation = new Animation(TimeSpan.Zero, null, image, position, tint, new Vector2(3), 0, SpriteEffects.None);
-
+            
             List<Rectangle> idleFrames = new List<Rectangle>();
             idleFrames.Add(new Rectangle(1, 1, 30, 40));
             idleFrames.Add(new Rectangle(36, 1, 30, 40));
@@ -32,7 +34,7 @@ namespace IronManGame
             idleFrames.Add(new Rectangle(145, 3, 31, 38));
             idleFrames.Add(new Rectangle(181, 4, 30, 37));
             idleFrames.Add(new Rectangle(216, 1, 29, 40));
-            
+            this.vp = vp;
             AddAnimations(PlayerState.idle, idleFrames, TimeSpan.FromMilliseconds(100));
 
             List<Rectangle> runningFrames = new List<Rectangle>();
@@ -56,7 +58,7 @@ namespace IronManGame
             jumpingFrames.Add(new Rectangle(107, 305, 32, 38));
             jumpingFrames.Add(new Rectangle(144, 307, 32, 36));
             jumpingFrames.Add(new Rectangle(818, 304, 32, 39));
-           
+
             AddAnimations(PlayerState.jumping, jumpingFrames, TimeSpan.FromMilliseconds(100));
 
             List<Rectangle> fallingFrames = new List<Rectangle>();
@@ -74,26 +76,30 @@ namespace IronManGame
 
             AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(500));
 
-            bulletFrames.Add(new Rectangle(1, 743, 16, 8));
-            bulletFrames.Add(new Rectangle(22, 743, 16, 8));
-
             ChangeState(PlayerState.idle);
         }
 
         public override void Update(GameTime gameTime, Viewport viewport)
         {
+            prevKs = ks;
             ks = Keyboard.GetState();
-            
+
             //if (ks.IsKeyUp(Keys.D) &&  CurrentState != PlayerState.jumping)
             //{
             //    ChangeState(PlayerState.jumping);
-                
+
             //}
             //else if (ks.IsKeyUp(Keys.A) && CurrentState == PlayerState.jumping)
             //{
             //    ChangeState(PlayerState.jumping);
-                
+
             //}
+
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                bullets[i].Update(gameTime);
+            }
+
             if (ks.IsKeyDown(Keys.D))
             {
                 ChangeState(PlayerState.running);
@@ -110,22 +116,47 @@ namespace IronManGame
                 jumpingState = JumpingState.InitialJump;
                 isJumping = true;
             }
-            else if (ks.IsKeyDown(Keys.Space))
+            else if (ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
             {
                 ChangeState(PlayerState.shooting);
-                bullets.Add(new Shot(bulletFrames, currentAnimation.texture, currentAnimation.position, currentAnimation.effects));
+                float speed = 5;
+
+                if (currentAnimation.effects == SpriteEffects.FlipHorizontally)
+                {
+                    speed *= -1;
+                }
+
+                bullets.Add(new Shot(currentAnimation.texture, currentAnimation.position, currentAnimation.effects, speed));
             }
             else if (StateEquals(PlayerState.jumping) && ks.IsKeyUp(Keys.W))
             {
                 isJumping = true;
             }
-            else if(ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W))
+            else if (ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W))
             {
                 ChangeState(PlayerState.idle);
                 isJumping = false;
             }
-
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                if (bullets[i].position.X >= vp.Width)
+                {
+                    bullets.Remove(bullets[i]);
+                }
+            }
             base.Update(gameTime, viewport);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+
+            for (int i = 0; i < bullets.Count; i++)
+            {
+                bullets[i].Draw(spriteBatch);
+                
+            }
+
+            base.Draw(spriteBatch);
         }
     }
 }

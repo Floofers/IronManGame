@@ -208,7 +208,7 @@ namespace IronManGame
             animations.Add(playerState, new KeyValuePair<List<Rectangle>, TimeSpan>(frames, animationTime));
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             currentAnimation.Draw(spriteBatch);
         }

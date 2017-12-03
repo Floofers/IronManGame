@@ -24,18 +24,19 @@ namespace IronManGame
             this.frames = frames;
         }
 
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
             elapsedTime += gameTime.ElapsedGameTime;
             Console.WriteLine(currentFrame);
             if (elapsedTime >= goalTime)
             {
 
-                if (currentFrame >= frames.Count - 1)
+                currentFrame++;
+
+                if (currentFrame > frames.Count - 1)
                 {
                     currentFrame = 0;
                 }
-                currentFrame++;
 
                 elapsedTime = TimeSpan.Zero;
             }

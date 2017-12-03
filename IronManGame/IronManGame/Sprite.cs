@@ -15,8 +15,8 @@ namespace IronManGame
         public Color color;
         public  Rectangle sourceRectangle;
         public Vector2 origin;
-        Vector2 scale;
-        float rotation;
+        protected Vector2 scale;
+        protected float rotation;
         public SpriteEffects effects;
 
         public Sprite(Texture2D texture, Vector2 position, Color color, Vector2 scale, float rotation, SpriteEffects effects)
