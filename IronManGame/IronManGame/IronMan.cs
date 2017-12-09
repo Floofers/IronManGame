@@ -13,11 +13,13 @@ namespace IronManGame
     {
         KeyboardState prevKs;
         KeyboardState ks;
-        PlayerState CurrentState;
+        
+        TimeSpan shootingTime;
 
+        bool ifSpace = false;
 
         List<Shot> bullets = new List<Shot>();
-        bool bulletsExist = false;
+        
         Viewport vp;
 
 
@@ -25,7 +27,7 @@ namespace IronManGame
             : base(speed)
         {
             currentAnimation = new Animation(TimeSpan.Zero, null, image, position, tint, new Vector2(3), 0, SpriteEffects.None);
-            
+
             List<Rectangle> idleFrames = new List<Rectangle>();
             idleFrames.Add(new Rectangle(1, 1, 30, 40));
             idleFrames.Add(new Rectangle(36, 1, 30, 40));
@@ -76,7 +78,11 @@ namespace IronManGame
 
             AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(500));
 
+            //List<Rectangle> crouchingFrames = new List<Rectangle>();
+
+
             ChangeState(PlayerState.idle);
+            shootingTime = TimeSpan.Zero;
         }
 
         public override void Update(GameTime gameTime, Viewport viewport)
@@ -121,12 +127,24 @@ namespace IronManGame
                 ChangeState(PlayerState.shooting);
                 float speed = 5;
 
+                ifSpace = true;
+
                 if (currentAnimation.effects == SpriteEffects.FlipHorizontally)
                 {
                     speed *= -1;
                 }
 
                 bullets.Add(new Shot(currentAnimation.texture, currentAnimation.position, currentAnimation.effects, speed));
+                
+            }
+            if (ifSpace)
+            {
+                shootingTime += TimeSpan.FromMilliseconds(1);
+                if (shootingTime >= TimeSpan.FromMilliseconds(10))
+                {
+                    shootingTime = TimeSpan.Zero;
+                    ifSpace = false;
+                }
             }
             else if (StateEquals(PlayerState.jumping) && ks.IsKeyUp(Keys.W))
             {
@@ -137,11 +155,20 @@ namespace IronManGame
                 ChangeState(PlayerState.idle);
                 isJumping = false;
             }
-            for (int i = 0; i < bullets.Count; i++)
+            if (bullets.Count >= 1)
             {
-                if (bullets[i].position.X >= vp.Width)
+                for (int i = 0; i < bullets.Count; i++)
                 {
-                    bullets.Remove(bullets[i]);
+                    if (bullets[i].position.X >= vp.Width)
+                    {
+                        bullets.Remove(bullets[i]);
+                    }
+
+                    else if (currentAnimation.effects == SpriteEffects.FlipHorizontally && bullets[i].position.X <= 0)
+                    {
+                        bullets.Remove(bullets[i]);
+                    }
+
                 }
             }
             base.Update(gameTime, viewport);
@@ -153,7 +180,7 @@ namespace IronManGame
             for (int i = 0; i < bullets.Count; i++)
             {
                 bullets[i].Draw(spriteBatch);
-                
+
             }
 
             base.Draw(spriteBatch);
