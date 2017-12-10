@@ -28,7 +28,7 @@ namespace IronManGame
             InAir,
             Falling
         }
-
+        public PlayerState PlayerState;
         protected RunningState runningState;
         protected JumpingState jumpingState;
 
@@ -77,8 +77,6 @@ namespace IronManGame
                 {
                     currentAnimation.position.Y = viewport.Height - 120;
                     velocity = speed.Y;
-                    ChangeState(PlayerState.jumping);
-                    isJumping = false;
                     ChangeState(PlayerState.idle);
                 }
             }
@@ -86,6 +84,11 @@ namespace IronManGame
             if (StateEquals(PlayerState.shooting))
             {
                 bulletPosition.X -= bulletSpeed;
+            }
+
+            if (StateEquals(PlayerState.crouching))
+            {
+                currentAnimation.position.Y = viewport.Height - (currentAnimation.sourceRectangle.Height)*3;
             }
             currentAnimation.Update(gameTime);
 
@@ -200,7 +203,7 @@ namespace IronManGame
 
         protected bool StateEquals(PlayerState playerState)
         {
-            return currentAnimation.frames == animations[playerState].Key;
+            return playerState == animations[;
         }
 
         protected void AddAnimations(PlayerState playerState, List<Rectangle> frames, TimeSpan animationTime)

@@ -76,9 +76,13 @@ namespace IronManGame
             shootingFrames.Add(new Rectangle(1, 426, 41, 37));
             shootingFrames.Add(new Rectangle(47, 425, 39, 38));
 
-            AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(500));
+            AddAnimations(PlayerState.shooting, shootingFrames, TimeSpan.FromMilliseconds(250));
 
-            //List<Rectangle> crouchingFrames = new List<Rectangle>();
+            List<Rectangle> crouchingFrames = new List<Rectangle>();
+            crouchingFrames.Add(new Rectangle(1, 229, 27, 28));
+            crouchingFrames.Add(new Rectangle(33, 229, 27, 28));
+
+            AddAnimations(PlayerState.crouching, crouchingFrames, TimeSpan.FromMilliseconds(100));
 
 
             ChangeState(PlayerState.idle);
@@ -119,7 +123,7 @@ namespace IronManGame
             else if (ks.IsKeyDown(Keys.W))
             {
                 ChangeState(PlayerState.jumping);
-                jumpingState = JumpingState.InitialJump;
+                
                 isJumping = true;
             }
             else if (ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
@@ -146,14 +150,23 @@ namespace IronManGame
                     ifSpace = false;
                 }
             }
-            else if (StateEquals(PlayerState.jumping) && ks.IsKeyUp(Keys.W))
+            
+            else if (ks.IsKeyDown(Keys.S))
             {
-                isJumping = true;
+                ChangeState(PlayerState.crouching);
             }
             else if (ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W))
             {
                 ChangeState(PlayerState.idle);
-                isJumping = false;
+                
+            }
+            if (ks.IsKeyDown(Keys.S) && ks.IsKeyDown(Keys.W))
+            {
+                ChangeState(PlayerState.crouching);
+            }
+            else if (ks.IsKeyUp(Keys.S) && PlayerState == PlayerState.crouching)
+            {
+                currentAnimation.position.Y = viewport.Height - (currentAnimation.sourceRectangle.Height)*3;
             }
             if (bullets.Count >= 1)
             {
