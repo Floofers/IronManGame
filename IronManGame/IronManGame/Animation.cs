@@ -33,7 +33,7 @@ namespace IronManGame
 
                 currentFrame++;
 
-                if (currentFrame > frames.Count - 1)
+                if (currentFrame >= frames.Count)
                 {
                     currentFrame = 0;
                 }

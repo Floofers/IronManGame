@@ -28,6 +28,7 @@ namespace IronManGame
         PlayerState playerState;
         SpriteEffects effects;
         IronMan ironMan;
+        SpriteFont font;
 
         Dictionary<PlayerState, List<Rectangle>> frames;
 
@@ -54,7 +55,7 @@ namespace IronManGame
             IronManSheet = Content.Load<Texture2D>("IronManSpriteSheet");
 
             IronManPosition = new Vector2(0, Window.ClientBounds.Height - 120);
-            
+            font = Content.Load<SpriteFont>("font");
 
             RunninFrames = new List<Rectangle>();
             RunninFrames.Add(new Rectangle(1, 102, 29, 32));
@@ -92,8 +93,8 @@ namespace IronManGame
             if (ks.IsKeyDown(Keys.Escape))
                 Exit();
 
-            //ironMan.Move(gameTime, GraphicsDevice.Viewport, ks);
-            ironMan.Update(gameTime, GraphicsDevice.Viewport);
+            ironMan.Update(gameTime, GraphicsDevice.Viewport, ks);
+            //ironMan.Update(gameTime, GraphicsDevice.Viewport);
 
             base.Update(gameTime);
         }
@@ -105,15 +106,10 @@ namespace IronManGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
-            // TODO: Add your drawing code here
-
             spriteBatch.Begin();
-
             ironMan.Draw(spriteBatch);
-
+            spriteBatch.DrawString(font, ironMan.CurrentState.ToString(), Vector2.Zero, Color.White);
             spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }

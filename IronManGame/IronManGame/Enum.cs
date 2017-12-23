@@ -13,6 +13,8 @@ namespace IronManGame
         jumping,
         falling,
         shooting,
-        crouching
+        crouching,
+        shootingWhileRunning,
+        shootingWhileCrouching
     }
 }
