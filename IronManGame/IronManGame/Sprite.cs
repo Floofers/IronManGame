@@ -28,8 +28,9 @@ namespace IronManGame
             this.rotation = rotation;
             this.effects = effects;
 
-            origin = new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2);
             sourceRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            origin = Vector2.Zero;// new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2);
+           
         }
 
         public void Draw(SpriteBatch sb)

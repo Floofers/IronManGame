@@ -12,14 +12,14 @@ namespace IronManGame
     class IronMan : Character
     {
         KeyboardState prevKs;
-        
+
         TimeSpan shootingTime;
 
         bool ifSpace = false;
         List<Rectangle> frames;
 
         List<Shot> bullets = new List<Shot>();
-        
+
         Viewport vp;
 
         List<Rectangle> idleFrames;
@@ -104,6 +104,18 @@ namespace IronManGame
             shootingWhileChrouchingFrames.Add(new Rectangle(1, 510, 38, 27));
             AddAnimations(PlayerState.shootingWhileCrouching, shootingWhileChrouchingFrames, TimeSpan.FromMilliseconds(2));
 
+            List<Rectangle> doubleJumpFrames = new List<Rectangle>();
+            doubleJumpFrames.Add(new Rectangle(1, 383, 32, 38));
+            doubleJumpFrames.Add(new Rectangle(38, 381, 37, 40));
+            doubleJumpFrames.Add(new Rectangle(79, 357, 42, 64));
+            doubleJumpFrames.Add(new Rectangle(126, 348, 49, 73));
+            doubleJumpFrames.Add(new Rectangle(181, 352, 49, 69));
+            doubleJumpFrames.Add(new Rectangle(235, 359, 50, 62));
+            doubleJumpFrames.Add(new Rectangle(290, 359, 51, 62));
+            doubleJumpFrames.Add(new Rectangle(346, 386, 32, 35));
+            doubleJumpFrames.Add(new Rectangle());
+
+
             ChangeState(PlayerState.idle);
             shootingTime = TimeSpan.Zero;
             this.idleFrames = idleFrames;
@@ -131,10 +143,10 @@ namespace IronManGame
             else if (ks.IsKeyDown(Keys.W))
             {
                 ChangeState(PlayerState.jumping);
-                
+
                 isJumping = true;
             }
-            else if (ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
+            else if (ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space) && ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.S))
             {
                 ChangeState(PlayerState.shooting);
                 float speed = 9;
@@ -147,13 +159,13 @@ namespace IronManGame
                 }
 
                 bullets.Add(new Shot(currentAnimation.texture, currentAnimation.position, currentAnimation.effects, speed));
-                
+
             }
-            if(ks.IsKeyDown(Keys.D) && ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
+            if (ks.IsKeyDown(Keys.D) && ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
             {
                 float speed = 9;
-                    ChangeState(PlayerState.shootingWhileRunning);
-                if(currentAnimation.effects == SpriteEffects.FlipHorizontally)
+                ChangeState(PlayerState.shootingWhileRunning);
+                if (currentAnimation.effects == SpriteEffects.FlipHorizontally)
                 {
                     speed *= -1;
                 }
@@ -171,11 +183,21 @@ namespace IronManGame
                 bullets.Add(new Shot(currentAnimation.texture, currentAnimation.position, currentAnimation.effects, speed));
                 ifSpace = true;
             }
-            if(ks.IsKeyDown(Keys.S) && ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
+            if (ks.IsKeyDown(Keys.S) && ks.IsKeyDown(Keys.Space) && prevKs.IsKeyUp(Keys.Space))
             {
-                float speed = 9;
+                float speed = 0;
+                if(currentAnimation.effects == SpriteEffects.None)
+                {
+                    speed = 9;
+                }
+                if(currentAnimation.effects == SpriteEffects.FlipHorizontally)
+                {
+                    speed = -9;
+                }
                 ChangeState(PlayerState.shootingWhileCrouching);
-                //bullets.Add(new Shot(currentAnimation.texture, currentAnimation.position, currentAnimation.effects, speed));
+                
+                bullets.Add(new Shot(currentAnimation.texture, currentAnimation.position, currentAnimation.effects, speed));
+                ifSpace = true;
             }
             if (ifSpace)
             {
@@ -186,7 +208,7 @@ namespace IronManGame
                     ifSpace = false;
                 }
             }
-            
+
 
             else if (ks.IsKeyDown(Keys.S))
             {
@@ -195,7 +217,7 @@ namespace IronManGame
             else if (ks.IsKeyUp(Keys.A) && ks.IsKeyUp(Keys.D) && ks.IsKeyUp(Keys.W) || currentAnimation.frames == idleFrames)
             {
                 ChangeState(PlayerState.idle);
-                
+
             }
             if (ks.IsKeyDown(Keys.S) && ks.IsKeyDown(Keys.W))
             {
@@ -203,7 +225,7 @@ namespace IronManGame
             }
             else if (ks.IsKeyUp(Keys.S) && CurrentState == PlayerState.crouching)
             {
-                currentAnimation.position.Y = viewport.Height - (currentAnimation.sourceRectangle.Height)*3;
+                currentAnimation.position.Y = viewport.Height - (currentAnimation.sourceRectangle.Height) * 3;
             }
             if (bullets.Count >= 1)
             {
@@ -233,6 +255,8 @@ namespace IronManGame
                 bullets[i].Draw(spriteBatch);
 
             }
+
+            //if crouched shooting left, draw him offset
 
             base.Draw(spriteBatch);
         }

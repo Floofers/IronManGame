@@ -111,11 +111,11 @@ namespace IronManGame
                 bulletPosition.X -= bulletSpeed;
                 if (currentAnimation.effects == SpriteEffects.None)
                 {
-                    currentAnimation.position.X += speed.X;
+                    bulletPosition.X += bulletSpeed;
                 }
                 if (currentAnimation.effects == SpriteEffects.FlipHorizontally)
                 {
-                    currentAnimation.position.X -= speed.X;
+                    bulletPosition.X -= bulletSpeed;
                 }
             }
         }
