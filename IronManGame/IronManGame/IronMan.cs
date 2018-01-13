@@ -107,14 +107,23 @@ namespace IronManGame
             List<Rectangle> doubleJumpFrames = new List<Rectangle>();
             doubleJumpFrames.Add(new Rectangle(1, 383, 32, 38));
             doubleJumpFrames.Add(new Rectangle(38, 381, 37, 40));
-            doubleJumpFrames.Add(new Rectangle(79, 357, 42, 64));
+            doubleJumpFrames.Add(new Rectangle(80, 357, 41, 64));
             doubleJumpFrames.Add(new Rectangle(126, 348, 49, 73));
             doubleJumpFrames.Add(new Rectangle(181, 352, 49, 69));
             doubleJumpFrames.Add(new Rectangle(235, 359, 50, 62));
             doubleJumpFrames.Add(new Rectangle(290, 359, 51, 62));
             doubleJumpFrames.Add(new Rectangle(346, 386, 32, 35));
-            doubleJumpFrames.Add(new Rectangle());
+            doubleJumpFrames.Add(new Rectangle(383, 386, 32, 35));
+            doubleJumpFrames.Add(new Rectangle(420, 385, 32, 36));
+            doubleJumpFrames.Add(new Rectangle(457, 386, 32, 35));
+            doubleJumpFrames.Add(new Rectangle(494, 382, 32, 39));
+            doubleJumpFrames.Add(new Rectangle(531, 374, 27, 47));
+            doubleJumpFrames.Add(new Rectangle(563, 375, 27, 46));
+            doubleJumpFrames.Add(new Rectangle(595, 374, 26, 47));
+            doubleJumpFrames.Add(new Rectangle(626, 375, 27, 46));
+            doubleJumpFrames.Add(new Rectangle(658, 375, 27, 46));
 
+            AddAnimations(PlayerState.crouching, doubleJumpFrames, TimeSpan.FromMilliseconds(300));
 
             ChangeState(PlayerState.idle);
             shootingTime = TimeSpan.Zero;
