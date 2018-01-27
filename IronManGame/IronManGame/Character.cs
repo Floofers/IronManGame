@@ -138,6 +138,7 @@ namespace IronManGame
 
         protected void AddAnimations(PlayerState playerState, List<Rectangle> frames, TimeSpan animationTime)
         {
+
             animations.Add(playerState, new KeyValuePair<List<Rectangle>, TimeSpan>(frames, animationTime));
         }
 

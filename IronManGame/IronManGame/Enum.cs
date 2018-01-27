@@ -15,6 +15,7 @@ namespace IronManGame
         shooting,
         crouching,
         shootingWhileRunning,
-        shootingWhileCrouching
+        shootingWhileCrouching,
+        doubleJumping
     }
 }
